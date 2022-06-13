@@ -27,6 +27,18 @@ namespace BitDataParser
         /// </summary>
         /// <param name="dic">The dictionary</param>
         /// <returns></returns>
+        public static string MakeCommentString(Dictionary<string, string> dic)
+        {
+            List<string> comments = dic.Select(variable => $"{variable.Key}: {variable.Value}").ToList();
+            string commentstring = String.Join(" ", comments);
+            return commentstring;
+        }
+
+        /// <summary>
+        ///     Implodes a dictionary into a single string
+        /// </summary>
+        /// <param name="dic">The dictionary</param>
+        /// <returns></returns>
         public static string MakeCommentString(Dictionary<string, object> dic)
         {
             List<string> comments = dic.Select(variable => $"{variable.Key}: {variable.Value}").ToList();
