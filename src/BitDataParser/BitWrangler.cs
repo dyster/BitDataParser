@@ -10,21 +10,51 @@ namespace BitDataParser
 
     public class BitSet
     {
+        public BitSet(byte data) : this(new byte[1] { data })
+        {            
+        }
+
         public BitSet(byte[] data)
         {
-            Bits = new LinkedList<Bit>();
+            Bits = new List<Bit>();
             foreach (var b in data)
             {
                 //var str = Convert.ToString(b, 2).PadLeft(8, '0');
                 for (int i = 7; i >= 0; i--)
                 {
                     var bit = (b & (1 << i)) != 0;
-                    Bits.AddLast(new Bit(bit));
+                    Bits.Add(new Bit(bit));
                 }
             }
         }
 
-        public LinkedList<Bit> Bits { get; set; }
+        public Bit this[int index]
+        {
+            get 
+            {
+                return Bits[index];
+            }
+        }        
+
+        private List<Bit> Bits { get; set; }
+
+        /// <summary>
+        /// Returns field from bit set, 1-8 bits long
+        /// </summary>
+        /// <param name="pos">The zero based position</param>
+        /// <param name="len">The length in bits</param>
+        /// <returns>A byte containing the selected bits, padded on left with zero</returns>
+        public byte GetField(int pos, int len)
+        {
+            var lastpos = pos + len - 1;
+            byte outbyte = 0x00;
+
+            for(int i = 7; pos != lastpos; i--)
+            {
+                outbyte = Functions.SetBit(outbyte, i, Bits[lastpos--].Value);
+            }
+            return outbyte;
+        }
 
         public void FlipAllBits()
         {
