@@ -11,7 +11,7 @@ namespace BitDataParser
     /// </summary>
     [Serializable]
     [DataContract]
-    public class DataSetCollection
+    public class DataSetCollection : makeSerializable
     {
         [DataMember] public string Name { get; set; }
         [DataMember] public string Description { get; set; }
@@ -28,17 +28,6 @@ namespace BitDataParser
             }
 
             return null;
-        }
-
-        public void Serialize(string path)
-        {
-            DataContractSerializer formatter = new DataContractSerializer(typeof(DataSetCollection),
-                new DataContractSerializerSettings()
-                    {MaxItemsInObjectGraph = Int32.MaxValue, KnownTypes = new List<Type>() {GetType()}});
-            using (var xmlWriter = XmlWriter.Create(File.Create(path), new XmlWriterSettings() {Indent = true}))
-            {
-                formatter.WriteObject(xmlWriter, this);
-            }
-        }
+        }        
     }
 }
