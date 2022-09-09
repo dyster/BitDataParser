@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace BitDataParser
 {
@@ -13,31 +14,35 @@ namespace BitDataParser
         ///     The name of the bitfield/variable
         /// </summary>
         [DataMember]
+        [XmlAttribute("name")]
         public string Name { get; set; }
 
         /// <summary>
         ///     A descriptive comment of the signal/variable/data
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
+        [XmlAttribute("comment")]
         public string Comment { get; set; }
 
         /// <summary>
         ///     The length in bits of the field, not used if VariableLengthSettings is set
         /// </summary>
         [DataMember]
+        [XmlAttribute("length")]
         public int Length { get; set; }
 
         /// <summary>
         ///     The type of data that should be parsed out of the bits
         /// </summary>
         [DataMember]
+        [XmlAttribute("type")]
         public BitFieldType BitFieldType { get; set; }
 
         /// <summary>
         /// If set, Value will be substituted by the matching entry
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public Dictionary<string, string> LookupTable { get; set; }
+        public LookupTable LookupTable { get; set; }
 
         /// <summary>
         /// If set, the BitField referenced by its Name property here will be used to determine the length of this Field, instead of the Length Parameter.
@@ -66,6 +71,7 @@ namespace BitDataParser
         /// This will be applied before LookupTable if that is set, but after SkipIfValue
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
+        [XmlAttribute("scaling")]
         public double Scaling { get; set; }
 
         /// <summary>

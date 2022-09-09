@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace BitDataParser
 {
@@ -21,6 +22,7 @@ namespace BitDataParser
         /// A name for this dataset (e.g Subset 27 Header)
         /// </summary>
         [DataMember]
+        [XmlAttribute("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace BitDataParser
         /// Setting this to true will flip all bits in the data before processing, i.e 1 will be 0 and 0 will be 1. Don't set this on nested datasets unless only the nested data is inverted
         /// </summary>
         [DataMember]
+        [XmlAttribute("invertbits")]
         public bool InvertBits { get; set; }
 
         public int CompareTo(object obj)
@@ -409,6 +412,7 @@ namespace BitDataParser
         }
 
         // indicates that some parsing error has occured within the dataset
+        [XmlIgnore]
         public bool Error { get; set; }
 
         private static string StringParser(Encoding encoding, byte[] data)

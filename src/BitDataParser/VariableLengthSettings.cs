@@ -24,6 +24,6 @@ namespace BitDataParser
         /// If a LookUpTable was used on the reference value, the underlying value will be used instead!
         /// </summary>
         [DataMember]
-        public Dictionary<int, int> LookUpTable { get; set; }
+        public IntLookupTable LookUpTable { get; set; }
     }
 }
