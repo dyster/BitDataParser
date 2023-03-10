@@ -63,6 +63,11 @@ namespace BitDataParser
         //        this[index.ToString()] = value;
         //    }
         //}        
+
+        public override string ToString()
+        {
+            return "Count " + Count;
+        }
     }
 
     public class IntLookupTable : IEnumerable<IntLookup>
@@ -111,7 +116,12 @@ namespace BitDataParser
                 }
                 Table.Add(new IntLookup(index, value));
             }
-        }          
+        }
+
+        public override string ToString()
+        {
+            return "Count " + Count;
+        }
     }
 
     public class Lookup
@@ -129,6 +139,11 @@ namespace BitDataParser
 
         public string From { get; set; }
         public string To { get; set; }
+
+        public override string ToString()
+        {
+            return From + "->" + To;
+        }
     }
 
     public class IntLookup
@@ -146,5 +161,10 @@ namespace BitDataParser
 
         public int From { get; set; }
         public int To { get; set; }
+
+        public override string ToString()
+        {
+            return From + "->" + To;
+        }
     }
 }
