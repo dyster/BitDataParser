@@ -152,14 +152,18 @@ namespace BitDataParser
                             }
                             else
                             {
-                                throw new InvalidDataException(
-                                    "The Variable needed for Variable Length has not been parsed");
+                                this.Error = true;
+                                dataSet.ParsedFields.Add(ParsedField.CreateError("The Variable needed for Variable Length has not been parsed: " + field.VariableLengthSettings.Name));
+                                // since length is now broken, we have to abort
+                                return dataSet;
                             }
                         }
                         else
                         {
-                            throw new InvalidDataException(
-                                "The Variable needed for Variable Length has not been parsed");
+                            this.Error = true;
+                            dataSet.ParsedFields.Add(ParsedField.CreateError("The Variable needed for Variable Length has not been parsed: " + field.VariableLengthSettings.Name));
+                            // since length is now broken, we have to abort
+                            return dataSet;
                         }
                     }
 
@@ -170,7 +174,19 @@ namespace BitDataParser
                     // if there is a LookUpTable on the current value, assign it
                     if (field.VariableLengthSettings.LookUpTable != null)
                     {
-                        length = field.VariableLengthSettings.LookUpTable[length];
+                        try
+                        {
+                            length = field.VariableLengthSettings.LookUpTable[length];
+                        }
+                        catch(NullReferenceException)
+                        {
+                            this.Error = true;
+                            dataSet.ParsedFields.Add(ParsedField.CreateError("Variable length lookup table did not contain value "+length));
+
+                            // since length is now broken, we have to abort
+                            return dataSet;
+                        }
+                        
                     }
                 }
                 else
