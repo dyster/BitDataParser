@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -86,6 +87,7 @@ namespace BitDataParser
         /// <returns></returns>
         public ParsedDataSet Parse(byte[] data, bool extensive = false, int offset = 0)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             var dataSet = ParsedDataSet.Create(this);
 
             int sum = GetBitLength();
@@ -93,7 +95,7 @@ namespace BitDataParser
             {
                 this.Error = true;
                 dataSet.ParsedFields.Add(ParsedField.CreateError("The number of bitfields exceeds the length of the data array"));
-                return dataSet;
+                return ReturnMethod();
             }
 
             if (InvertBits)
@@ -155,7 +157,7 @@ namespace BitDataParser
                                 this.Error = true;
                                 dataSet.ParsedFields.Add(ParsedField.CreateError("The Variable needed for Variable Length has not been parsed: " + field.VariableLengthSettings.Name));
                                 // since length is now broken, we have to abort
-                                return dataSet;
+                                return ReturnMethod();
                             }
                         }
                         else
@@ -163,7 +165,7 @@ namespace BitDataParser
                             this.Error = true;
                             dataSet.ParsedFields.Add(ParsedField.CreateError("The Variable needed for Variable Length has not been parsed: " + field.VariableLengthSettings.Name));
                             // since length is now broken, we have to abort
-                            return dataSet;
+                            return ReturnMethod();
                         }
                     }
 
@@ -184,7 +186,7 @@ namespace BitDataParser
                             dataSet.ParsedFields.Add(ParsedField.CreateError("Variable length lookup table did not contain value "+length));
 
                             // since length is now broken, we have to abort
-                            return dataSet;
+                            return ReturnMethod();
                         }
                         
                     }
@@ -208,7 +210,7 @@ namespace BitDataParser
                         {
                             this.Error = true;
                             dataSet.ParsedFields.Add(ParsedField.CreateError("There is not enough data to continue parsing"));
-                            return dataSet;
+                            return ReturnMethod();
                         }
 
                         // datasetparser will always start at 0, so get the sub array, don't know length so get the whole thing
@@ -230,7 +232,7 @@ namespace BitDataParser
                 {
                     this.Error = true;
                     dataSet.ParsedFields.Add(ParsedField.CreateError("There is not enough data to continue parsing"));
-                    return dataSet;
+                    return ReturnMethod();
                 }
 
 
@@ -424,12 +426,23 @@ namespace BitDataParser
 
             dataSet.BitsRead = pointer - 1 - offset;
 
-            return dataSet;
+            return ReturnMethod();
+
+            ParsedDataSet ReturnMethod()
+            {
+                stopwatch.Stop();
+                PerformanceInfo.DataSetsCreated++;
+                PerformanceInfo.TimeSpent += stopwatch.Elapsed;                
+                return dataSet;
+            }
         }
 
         // indicates that some parsing error has occured within the dataset
         [XmlIgnore]
         public bool Error { get; set; }
+
+        [XmlIgnore]
+        public PerformanceInfo PerformanceInfo { get; set; } = new PerformanceInfo();
 
         private static string StringParser(Encoding encoding, byte[] data)
         {
@@ -462,5 +475,26 @@ namespace BitDataParser
 
             return output;
         }
+    }
+
+    /// <summary>
+    /// Holds performance info collected during usage
+    /// </summary>
+    public class PerformanceInfo
+    {
+        public int DataSetsCreated { get; internal set; } = 0;
+
+        public TimeSpan TimeSpent { get; internal set; } = new TimeSpan();
+
+        /// <summary>
+        /// Calculates the average time spent per dataset
+        /// </summary>
+        public double TimePerDataset => TimeSpent.TotalMilliseconds / DataSetsCreated;
+
+        public override string ToString()
+        {
+            return $"DataSets created: {DataSetsCreated}, Total time spent: {TimeSpent}, average per set: {TimePerDataset}ms";
+        }
+
     }
 }
