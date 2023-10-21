@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Text.Json;
 
 namespace BitDataParser
 {
@@ -28,6 +29,13 @@ namespace BitDataParser
                 var xmlwriter = XmlWriter.Create(file, new XmlWriterSettings() { Indent = indent });
                 serializer.Serialize(xmlwriter, this);
             }
+        }
+
+        public void SerializeJson(string filePath, bool indent = true)
+        {
+            using FileStream fileStream = File.Create(filePath);
+            JsonSerializer.Serialize(fileStream, this, this.GetType(), new JsonSerializerOptions { WriteIndented = indent });
+
         }
     }
 }
