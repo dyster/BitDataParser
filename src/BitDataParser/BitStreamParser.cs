@@ -276,7 +276,7 @@ namespace BitDataParser
                     case BitFieldType.UInt8:
                         if (length > 8)
                             throw new ArgumentOutOfRangeException("Length has to be at max 8 for this type");
-                        set = Functions.FieldGetter(data, pointer, length);
+                        set = (byte)Functions.FieldGetter(data, pointer, length);
                         break;
                     case BitFieldType.UInt16:
                         if (length > 16)
