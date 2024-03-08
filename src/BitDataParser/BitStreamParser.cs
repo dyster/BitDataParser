@@ -350,9 +350,18 @@ namespace BitDataParser
                                 Functions.SubArrayGetter(data, pointer, length, 4).Reverse().ToArray(), 0);
                             set = Functions.UnixEpochToDateTime(unixepoch);
                         }
+                        if (length == 48)
+                        {
+                            var unixepoch = BitConverter.ToUInt32(
+                                Functions.SubArrayGetter(data, pointer, 32, 4).Reverse().ToArray(), 0);
+                            
+                            double tick = BitConverter.ToUInt16(Functions.SubArrayGetter(data, pointer, 16, 2).Reverse().ToArray());
+                            double s = tick / 65536f;
+                            set = Functions.UnixEpochToDateTime(unixepoch).AddSeconds(s);
+                        }
                         else
                         {
-                            throw new ArgumentOutOfRangeException("Length has to be 32 for this type");
+                            throw new ArgumentOutOfRangeException("Length has to be 32 or 48 for this type");
                         }
 
                         break;

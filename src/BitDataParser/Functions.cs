@@ -340,5 +340,20 @@ namespace BitDataParser
             var unixepoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return unixepoch.AddSeconds(seconds);
         }
+
+        public static byte ReverseBits(byte b)
+        {
+            return (byte)(((b * 0x80200802ul) & 0x0884422110ul) * 0x0101010101ul >> 32);
+        }
+
+        public static byte[] ReverseBits(byte[] array)
+        {
+            var reversed = new byte[array.Length];
+            for(int i = 0; i < reversed.Length; i++)
+            {
+                reversed[i] = ReverseBits(array[i]);
+            }
+            return reversed;
+        }
     }
 }
