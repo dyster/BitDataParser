@@ -17,11 +17,11 @@ namespace BitDataParser
         [DataMember] public string Description { get; set; }
         [DataMember] public List<DataSetDefinition> DataSets { get; set; } = new List<DataSetDefinition>();
 
-        public DataSetDefinition FindByIdentifier(string ident)
+        public DataSetDefinition FindByIdentifier(Identifiers ident)
         {
             foreach (var d in DataSets)
             {
-                if (d.Identifiers.Contains(ident))
+                if (d.Identifiers.Equals(ident))
                 {
                     return d;
                 }

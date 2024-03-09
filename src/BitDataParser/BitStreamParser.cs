@@ -36,7 +36,7 @@ namespace BitDataParser
         /// If the dataset is bound to a specific unique id, use this
         /// </summary>
         [DataMember]
-        public List<string> Identifiers { get; set; } = new List<string>();
+        public Identifiers Identifiers { get; set; }
 
         /// <summary>
         /// A list of BitFields that describes how to parse data
@@ -350,7 +350,7 @@ namespace BitDataParser
                                 Functions.SubArrayGetter(data, pointer, length, 4).Reverse().ToArray(), 0);
                             set = Functions.UnixEpochToDateTime(unixepoch);
                         }
-                        if (length == 48)
+                        else if (length == 48)
                         {
                             var unixepoch = BitConverter.ToUInt32(
                                 Functions.SubArrayGetter(data, pointer, 32, 4).Reverse().ToArray(), 0);
@@ -462,10 +462,10 @@ namespace BitDataParser
 
         public override string ToString()
         {
-            if (Identifiers.Count == 0)
+            if (Identifiers == null)
                 return Name;
             else
-                return Name + " [" + string.Join(",", Identifiers) + "]";
+                return Name + " [" + Identifiers + "]";
         }
 
         public string Serialize()
