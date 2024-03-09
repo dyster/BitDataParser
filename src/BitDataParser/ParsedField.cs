@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace BitDataParser
 {
@@ -22,13 +23,13 @@ namespace BitDataParser
         /// <summary>
         /// Used by the parser to find the BitField used to parse it 
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         public BitField UsedBitField { get; set; }
 
-        //[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public string Name => UsedBitField.Name;
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public string Comment => UsedBitField.Comment;
 
         /// <summary>

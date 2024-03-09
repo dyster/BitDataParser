@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace BitDataParser
 {
@@ -15,15 +16,15 @@ namespace BitDataParser
         /// <summary>
         /// Gets the number of bits that was read while parsed
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         public int BitsRead { get; set; }
 
         public ParsedField this[int i] => ParsedFields[i];
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public DataSetDefinition Definition { get; private set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public string Name
         {
             get
@@ -33,7 +34,7 @@ namespace BitDataParser
             }
         }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public string Comment => Definition?.Comment;
 
         public int CompareTo(object obj)
