@@ -34,7 +34,7 @@ namespace BitDataParser
         public void SerializeJson(string filePath, bool indent = true)
         {
             using FileStream fileStream = File.Create(filePath);
-            JsonSerializer.Serialize(fileStream, this, this.GetType(), new JsonSerializerOptions { WriteIndented = indent });
+            JsonSerializer.Serialize(fileStream, this, this.GetType(), new JsonSerializerOptions { WriteIndented = indent, NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals });
 
         }
     }

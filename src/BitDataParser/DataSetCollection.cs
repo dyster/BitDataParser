@@ -11,6 +11,7 @@ namespace BitDataParser
     /// </summary>
     [Serializable]
     [DataContract]
+    [KnownType(typeof(Lookup))]
     public class DataSetCollection : makeSerializable
     {
         [DataMember] public string Name { get; set; }
