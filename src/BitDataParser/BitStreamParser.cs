@@ -329,8 +329,7 @@ namespace BitDataParser
                             Functions.SubArrayGetter(data, pointer, length, 4).Reverse().ToArray(), 0);
                         break;
                     case BitFieldType.Float128:
-                        throw new NotImplementedException("Why would you do this to me?");
-                        break;
+                        throw new NotImplementedException("Why would you do this to me?");                        
                     case BitFieldType.Bool:
                         set = Functions.FieldGetter(data, pointer, length) > 0;
                         break;
@@ -386,7 +385,7 @@ namespace BitDataParser
                         {
                             set = Convert.ToDouble(set) * field.Scaling;
                         }
-                        catch (Exception e)
+                        catch
                         {
                             // TODO do something about this!
                             //Logger.Log("Applying scaling failed", Severity.Warning, e);
@@ -402,7 +401,7 @@ namespace BitDataParser
                             {
                                 set = field.LookupTable[set.ToString()];
                             }
-                            catch (Exception e)
+                            catch
                             {
                                 // TODO do something about this!
                                 //Logger.Log("Value lookup failed", Severity.Error, e);

@@ -29,6 +29,7 @@ namespace BitDataParser
         public List<int> Numeric { get; set; } = new List<int>();
 
         public IPv4 Source { get; set; }
+        public IPv4 Destination { get; set; }
 
         public bool Equals(Identifiers other)
         {
@@ -77,6 +78,19 @@ namespace BitDataParser
     [Serializable]
     public class IPv4 : IEquatable<IPv4>
     {
+        public IPv4()
+        {
+            // empty constructor for serialization
+        }
+
+        public IPv4(byte val1, byte val2, byte val3, byte val4)
+        {
+            Val1 = val1;
+            Val2 = val2;
+            Val3 = val3;
+            Val4 = val4;
+        }
+
         public byte Val1 { get; set; }
         public byte Val2 { get; set; }
         public byte Val3 { get; set; }
